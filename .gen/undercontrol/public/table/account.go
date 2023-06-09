@@ -17,12 +17,14 @@ type accountTable struct {
 	postgres.Table
 
 	//Columns
-	ID        postgres.ColumnInteger
-	Name      postgres.ColumnString
-	CreatedAt postgres.ColumnTimestampz
-	CreatedBy postgres.ColumnString
-	UpdatedAt postgres.ColumnTimestampz
-	UpdatedBy postgres.ColumnString
+	ID           postgres.ColumnInteger
+	Name         postgres.ColumnString
+	Amount       postgres.ColumnInteger
+	CurrencyCode postgres.ColumnString
+	CreatedAt    postgres.ColumnTimestampz
+	CreatedBy    postgres.ColumnString
+	UpdatedAt    postgres.ColumnTimestampz
+	UpdatedBy    postgres.ColumnString
 
 	AllColumns     postgres.ColumnList
 	MutableColumns postgres.ColumnList
@@ -63,26 +65,30 @@ func newAccountTable(schemaName, tableName, alias string) *AccountTable {
 
 func newAccountTableImpl(schemaName, tableName, alias string) accountTable {
 	var (
-		IDColumn        = postgres.IntegerColumn("id")
-		NameColumn      = postgres.StringColumn("name")
-		CreatedAtColumn = postgres.TimestampzColumn("created_at")
-		CreatedByColumn = postgres.StringColumn("created_by")
-		UpdatedAtColumn = postgres.TimestampzColumn("updated_at")
-		UpdatedByColumn = postgres.StringColumn("updated_by")
-		allColumns      = postgres.ColumnList{IDColumn, NameColumn, CreatedAtColumn, CreatedByColumn, UpdatedAtColumn, UpdatedByColumn}
-		mutableColumns  = postgres.ColumnList{NameColumn, CreatedAtColumn, CreatedByColumn, UpdatedAtColumn, UpdatedByColumn}
+		IDColumn           = postgres.IntegerColumn("id")
+		NameColumn         = postgres.StringColumn("name")
+		AmountColumn       = postgres.IntegerColumn("amount")
+		CurrencyCodeColumn = postgres.StringColumn("currency_code")
+		CreatedAtColumn    = postgres.TimestampzColumn("created_at")
+		CreatedByColumn    = postgres.StringColumn("created_by")
+		UpdatedAtColumn    = postgres.TimestampzColumn("updated_at")
+		UpdatedByColumn    = postgres.StringColumn("updated_by")
+		allColumns         = postgres.ColumnList{IDColumn, NameColumn, AmountColumn, CurrencyCodeColumn, CreatedAtColumn, CreatedByColumn, UpdatedAtColumn, UpdatedByColumn}
+		mutableColumns     = postgres.ColumnList{NameColumn, AmountColumn, CurrencyCodeColumn, CreatedAtColumn, CreatedByColumn, UpdatedAtColumn, UpdatedByColumn}
 	)
 
 	return accountTable{
 		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		ID:        IDColumn,
-		Name:      NameColumn,
-		CreatedAt: CreatedAtColumn,
-		CreatedBy: CreatedByColumn,
-		UpdatedAt: UpdatedAtColumn,
-		UpdatedBy: UpdatedByColumn,
+		ID:           IDColumn,
+		Name:         NameColumn,
+		Amount:       AmountColumn,
+		CurrencyCode: CurrencyCodeColumn,
+		CreatedAt:    CreatedAtColumn,
+		CreatedBy:    CreatedByColumn,
+		UpdatedAt:    UpdatedAtColumn,
+		UpdatedBy:    UpdatedByColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

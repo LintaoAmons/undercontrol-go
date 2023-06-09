@@ -12,10 +12,12 @@ import (
 )
 
 type Account struct {
-	ID        int32 `sql:"primary_key"`
-	Name      string
-	CreatedAt *time.Time
-	CreatedBy *string
-	UpdatedAt *time.Time
-	UpdatedBy *string
+	ID           int32 `sql:"primary_key"`
+	Name         string
+	Amount       *int64
+	CurrencyCode *string
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
 }

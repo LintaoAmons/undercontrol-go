@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS account(
   id serial PRIMARY KEY,
   name VARCHAR (50) UNIQUE NOT NULL,
+  amount BIGINT,
+  currency_code VARCHAR(5),
   
   
   -- Audit

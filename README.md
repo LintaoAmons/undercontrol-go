@@ -6,6 +6,7 @@
 - Core system
 	- golang
 	- [viper](https://github.com/spf13/viper)
+    - [go-money](https://github.com/Rhymond/go-money)
 - Persistency
 	- postgres
 	- [golang-migrate](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md)
