@@ -12,7 +12,7 @@ func SetupPostgres() *sql.DB {
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
 		"postgres",
 		"password",
-		"postgres",
+		"undercontrol",
 		"localhost",
 		"5432",
 	)

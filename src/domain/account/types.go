@@ -13,7 +13,9 @@ type Account struct {
 }
 
 type AccountRepository interface {
-	Save(a *Account) (id string)
+  Insert(a *Account) (int32, error)
+	Save(a *Account) (id int32)
+
 	Get(id string) (*Account, error)
   Find(id string) (*Account)
   FindAll() (*[]Account)
