@@ -8,6 +8,10 @@
 	- [viper](https://github.com/spf13/viper)
     - [go-money](https://github.com/Rhymond/go-money)
 - Persistency
-	- postgres
-	- [golang-migrate](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md)
+	- Postgres
+    - Database Migration
+        - ✅ [golang-migrate](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md)
+        - [goose](https://github.com/pressly/goose)
+        - [atlas](https://atlasgo.io/)
+        - Next time may try `atlas`'s declarative way of migration
     - [go-jet](https://github.com/go-jet/jet)
