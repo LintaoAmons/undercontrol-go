@@ -9,7 +9,7 @@ func AccountConvert(i *a.Account) *b.Account {
 	amount := i.Amount.Absolute().Amount()
 	currencyCode := i.Amount.Currency().Code
 	return &b.Account{
-		ID:           1,
+		ID:           0, // ID won't be used when INSERT OR UPDATE
 		Name:         i.Name,
 		Amount:       &amount,
 		CurrencyCode: &currencyCode,

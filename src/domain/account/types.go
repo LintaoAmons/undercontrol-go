@@ -13,10 +13,11 @@ type Account struct {
 }
 
 type AccountRepository interface {
-  Insert(a *Account) (int32, error)
+	Insert(a *Account) (int32, error)
+	Update(a *Account) (int32, error)
 	Save(a *Account) (id int32)
 
 	Get(id string) (*Account, error)
-  Find(id string) (*Account)
-  FindAll() (*[]Account)
+	Find(id string) *Account
+	FindAll() *[]Account
 }
