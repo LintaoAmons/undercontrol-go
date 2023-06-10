@@ -41,6 +41,12 @@ func Test_Update(t *testing.T) {
 	})
 }
 
+func Test_Get(t *testing.T) {
+	repo := initRepo()
+
+	repo.Get("Test3")
+}
+
 func initRepo() domain.AccountRepository {
 	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelTrace).WithMaxWidth(200)
 

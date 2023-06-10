@@ -3,6 +3,7 @@ package account
 import (
 	"database/sql"
 
+	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/model"
 	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/table"
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/davecgh/go-spew/spew"
@@ -73,12 +74,24 @@ func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
 	return po.ID, nil
 }
 
-func (ar *AccountRepositoryImpl) Get(id string) (*domain.Account, error) {
+func (ar *AccountRepositoryImpl) Get(name string) (*domain.Account, error) {
 	// TODO:
+	x := table.Account.
+		SELECT(table.Account.AllColumns).
+		WHERE(table.Account.Name.EQ(postgres.String(name)))
+	ar.logger.Trace(x.DebugSql())
+
+  // TODO: to domain model
+	var dest []struct {
+		model.Account
+	}
+	x.Query(ar.db, &dest)
+	spew.Dump(dest)
+
 	return nil, nil
 }
 
-func (ar *AccountRepositoryImpl) Find(id string) *domain.Account {
+func (ar *AccountRepositoryImpl) Find(name string) *domain.Account {
 	// TODO:
 	return nil
 }
