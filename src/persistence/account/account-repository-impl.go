@@ -20,23 +20,18 @@ func NewAccountRepository(db *sql.DB, logger *pterm.Logger) domain.AccountReposi
 }
 
 func (ar *AccountRepositoryImpl) Save(a *domain.Account) (id int32) {
-	// po := AccountConvert(a)
-	// TODO:
+	po := AccountConvert(a)
+	x := table.Account.SELECT(table.Account.Name).WHERE(table.Account.Name.EQ(postgres.String(po.Name)))
+	ar.logger.Trace(x.DebugSql())
+	dest := []string{}
+	x.Query(ar.db, &dest)
+	if len(dest) > 0 {
+		ar.Update(a)
+	} else {
+		ar.Insert(a)
+	}
 	return 1
 }
-
-// func (p *PocketRepositoryImpl) Update(pocket Pocket) (string, error) {
-// 	model := pocketToModel(pocket)
-// 	x := table.Pocket.UPDATE(table.Pocket.AllColumns).MODEL(model).
-// 		WHERE(table.Pocket.ID.EQ(String(pocket.Id)))
-// 	logger.Trace(x.DebugSql())
-// 	result, err := x.Exec(p.db)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	logger.Trace(fmt.Sprintf("LastInsertId: %v", result))
-// 	return pocket.Id, nil
-// }
 
 func (ar *AccountRepositoryImpl) Update(a *domain.Account) (int32, error) {
 	po := AccountConvert(a)
@@ -60,7 +55,7 @@ func (ar *AccountRepositoryImpl) Update(a *domain.Account) (int32, error) {
 
 func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
 	po := AccountConvert(a)
-	result, err := table.Account.
+	_, err := table.Account.
 		INSERT(table.Account.Name,
 			table.Account.Amount,
 			table.Account.CurrencyCode,
@@ -74,7 +69,6 @@ func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
 		ar.logger.Error(spew.Sdump(err))
 		panic(err)
 	}
-	ar.logger.Info(spew.Sdump(result))
 
 	return po.ID, nil
 }

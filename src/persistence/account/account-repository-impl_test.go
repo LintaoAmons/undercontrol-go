@@ -11,6 +11,16 @@ import (
 	"github.com/pterm/pterm"
 )
 
+func Test_Save(t *testing.T) {
+	repo := initRepo()
+
+	repo.Save(&domain.Account{
+		Name:   "Test4",
+		Amount: money.New(1234, money.CNY),
+		Audit:  common.DefaultAudit(),
+	})
+}
+
 func Test_Insert(t *testing.T) {
 	repo := initRepo()
 
