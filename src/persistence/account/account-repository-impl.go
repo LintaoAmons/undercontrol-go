@@ -75,20 +75,17 @@ func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
 }
 
 func (ar *AccountRepositoryImpl) Get(name string) (*domain.Account, error) {
-	// TODO:
 	x := table.Account.
 		SELECT(table.Account.AllColumns).
 		WHERE(table.Account.Name.EQ(postgres.String(name)))
 	ar.logger.Trace(x.DebugSql())
 
-  // TODO: to domain model
 	var dest []struct {
 		model.Account
 	}
 	x.Query(ar.db, &dest)
-	spew.Dump(dest)
 
-	return nil, nil
+	return AccountPoToDomain(&dest[0].Account), nil
 }
 
 func (ar *AccountRepositoryImpl) Find(name string) *domain.Account {
@@ -97,6 +94,19 @@ func (ar *AccountRepositoryImpl) Find(name string) *domain.Account {
 }
 
 func (ar *AccountRepositoryImpl) FindAll() *[]domain.Account {
-	// TODO:
-	return nil
+	x := table.Account.
+		SELECT(table.Account.AllColumns)
+
+	ar.logger.Trace(x.DebugSql())
+	var dest []struct {
+		model.Account
+	}
+	x.Query(ar.db, &dest)
+
+	result := []domain.Account{}
+	for _, v := range dest {
+		result = append(result, *AccountPoToDomain(&v.Account))
+	}
+
+	return &result
 }

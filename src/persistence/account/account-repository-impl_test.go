@@ -8,6 +8,7 @@ import (
 	. "github.com/LintaoAmons/undercontrol/src/persistence/account"
 	setup "github.com/LintaoAmons/undercontrol/src/persistence/common"
 	"github.com/Rhymond/go-money"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/pterm/pterm"
 )
 
@@ -44,7 +45,17 @@ func Test_Update(t *testing.T) {
 func Test_Get(t *testing.T) {
 	repo := initRepo()
 
-	repo.Get("Test3")
+	result, _ := repo.Get("Test3")
+
+	spew.Dump(result)
+}
+
+func Test_FindAll(t *testing.T) {
+	repo := initRepo()
+
+	result := repo.FindAll()
+
+	spew.Dump(result)
 }
 
 func initRepo() domain.AccountRepository {

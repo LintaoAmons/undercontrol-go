@@ -27,3 +27,7 @@ func Test_Money(t *testing.T) {
   spew.Dump(a.Amount())
   spew.Dump(a.Currency())
 }
+
+func Test_AccountPoToDomain(t *testing.T) {
+  
+}
