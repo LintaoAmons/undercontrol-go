@@ -4,10 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
-	account "github.com/LintaoAmons/undercontrol/src/persistence/account"
-	"github.com/pterm/pterm"
+	"github.com/LintaoAmons/undercontrol/src/facade/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -16,14 +13,7 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all accounts",
 	Run: func(cmd *cobra.Command, args []string) {
-		repo := account.NewAccountRepository()
-		accounts := repo.FindAll()
-		rows := [][]string{}
-    rows = append(rows, []string{"Name", "Amount", "Currency"})
-		for _, v := range accounts {
-      rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Absolute().Amount()), v.Amount.Currency().Code})
-		}
-		pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
+		cli.List()
 	},
 }
 
