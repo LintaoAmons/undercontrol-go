@@ -27,7 +27,8 @@ func Add() {
 	if amountStr == "" {
 		amountStr = "0"
 	}
-	amount, err := strconv.Atoi(amountStr)
+	amount, err := strconv.ParseFloat(amountStr, 64)
+
 	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
 	if err != nil {
 		logger.Error("Invalid amount", []pterm.LoggerArgument{

@@ -21,15 +21,15 @@ func NewAccountService(repo AccountRepository) *AccountService {
 
 type CreateAccountCommand struct {
 	Name     string
-	Amount   int
+	Amount   float64
 	Currency string
 }
 
 func (cac CreateAccountCommand) create() *Account {
 	return &Account{
 		Name:   cac.Name,
-		Amount: money.New(int64(cac.Amount), cac.Currency),
-    Audit: common.DefaultAudit(),
+		Amount: money.NewFromFloat(cac.Amount, cac.Currency),
+		Audit:  common.DefaultAudit(),
 	}
 }
 
