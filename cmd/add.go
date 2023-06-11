@@ -18,8 +18,11 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new account",
 	Run: func(cmd *cobra.Command, args []string) {
-		name, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Your new account name(Unnamed)")
+		name, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Your new account name")
 		amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
+    if amountStr == "" {
+      amountStr = "0"
+    }
 		amount, err := strconv.Atoi(amountStr) // TODO: handle error
 		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
 		if err != nil {
