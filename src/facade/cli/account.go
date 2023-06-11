@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
@@ -15,7 +16,7 @@ func List() {
 	rows := [][]string{}
 	rows = append(rows, []string{"Name", "Amount", "Currency"})
 	for _, v := range accounts {
-		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Absolute().Amount()), v.Amount.Currency().Code})
+		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
 	}
 	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
 }
@@ -65,4 +66,27 @@ func Get(name *string) {
 	}
 	logger.Info("========== Account Info ===========",
 		logger.ArgsFromMap(accountInfo))
+}
+
+func Deposit() {
+	accounts := u.FindAll()
+	var options []string
+	for _, v := range accounts {
+		options = append(options, fmt.Sprint(v.Name+": "+v.Amount.Display()))
+	}
+	selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show("Select the account you want put money in")
+	selectedName := strings.Split(selectedOption, ":")[0]
+
+	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		pterm.Info.Printfln("Invalid amount")
+	}
+	u.Deposit(&usecase.DepositCommand{
+		Name:   selectedName,
+		Amount: amount,
+	})
+	after, _ := u.Get(selectedName)
+	pterm.Info.Println("Deposit successfully")
+	pterm.Info.Printfln("Account [%s]: %s", after.Name, after.Amount.Display())
 }
