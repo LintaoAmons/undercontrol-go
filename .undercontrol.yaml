@@ -1,0 +1,6 @@
+db:
+  host: localhost
+  password: password
+  user: postgres
+  dbname: undercontrol
+  port: 5432

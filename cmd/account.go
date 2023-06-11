@@ -1,13 +1,14 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // accountCmd represents the account command
@@ -21,6 +22,9 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+	pterm.Info.Printfln(viper.GetString("db.host"))
+	pterm.Info.Printfln(viper.GetString("db.password"))
+	pterm.Info.Printfln(viper.GetString("db.dbname"))
 		fmt.Println("account called")
 	},
 }
