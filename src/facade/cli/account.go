@@ -19,6 +19,7 @@ func List() {
 		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
 	}
 	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
+  // TODO: display total
 }
 
 func Add() {
