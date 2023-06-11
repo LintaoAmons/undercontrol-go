@@ -1,27 +1,42 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
+	"github.com/LintaoAmons/undercontrol/src/domain/usecase"
+	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
 
 // depositCmd represents the deposit command
 var depositCmd = &cobra.Command{
 	Use:   "deposit",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Deposit more money into one account",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deposit called")
+		u := usecase.NewAccountUsecase()
+		accounts := u.FindAll()
+		var options []string
+		for _, v := range accounts {
+			options = append(options, fmt.Sprint(v.Name+": "+v.Amount.Display()))
+		}
+		selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show("Select the account you want put money in")
+		selectedName := strings.Split(selectedOption, ":")[0]
+
+		amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
+		pterm.Info.Printfln("selectedOption: %s", pterm.Green(selectedOption))
+		amount, err := strconv.Atoi(amountStr)
+		if err != nil {
+			pterm.Info.Printfln("Invalid amount")
+		}
+		u.Deposit(&usecase.DepositCommand{
+			Name:   selectedName,
+			Amount: amount,
+		})
 	},
 }
 
