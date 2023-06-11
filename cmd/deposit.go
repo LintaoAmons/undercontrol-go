@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/LintaoAmons/undercontrol/src/domain/usecase"
+	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/LintaoAmons/undercontrol/src/domain/usecase"
+	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

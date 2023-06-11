@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/LintaoAmons/undercontrol/src/domain/usecase"
+	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
 )
 
