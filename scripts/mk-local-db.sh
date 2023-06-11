@@ -7,3 +7,5 @@ docker run \
 	-e POSTGRES_PASSWORD=password \
 	-d \
 	postgres
+
+PGPASSWORD=password psql -h localhost -U postgres -w -c "create database undercontrol;"
