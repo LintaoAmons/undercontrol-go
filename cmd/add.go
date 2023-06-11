@@ -4,12 +4,8 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"strconv"
+	"github.com/LintaoAmons/undercontrol/src/facade/cli"
 
-	"github.com/LintaoAmons/undercontrol/src/domain/account"
-	accountP "github.com/LintaoAmons/undercontrol/src/persistence/account"
-
-	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
 
@@ -18,34 +14,7 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new account",
 	Run: func(cmd *cobra.Command, args []string) {
-		name, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Your new account name")
-		amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
-		if amountStr == "" {
-			amountStr = "0"
-		}
-		amount, err := strconv.Atoi(amountStr)
-		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
-		if err != nil {
-			logger.Error("Invalid amount", []pterm.LoggerArgument{
-				{
-					Key:   "Your input",
-					Value: "[" + amountStr + "]",
-				},
-			})
-			panic("Invalid Amount") // TODO: is there another way to exit the app other than panic?
-		}
-		currency, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Currency of this account(CNY)")
-		if currency == "" {
-			currency = "CNY"
-		}
-
-		service := account.NewAccountService(accountP.NewAccountRepository())
-		service.CreateNewAccount(&account.CreateAccountCommand{
-			Name:     name,
-			Amount:   amount,
-			Currency: currency,
-		})
-		logger.Info("Created successfully")
+		cli.Add()
 	},
 }
 

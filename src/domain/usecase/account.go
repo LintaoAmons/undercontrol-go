@@ -27,7 +27,8 @@ func (au *AccountUsecase) FindAll() []*account.Account {
 	return au.repo.FindAll()
 }
 
-func (au *AccountUsecase) Add(c *account.CreateAccountCommand) {
+type CreateAccountCommand = account.CreateAccountCommand
+func (au *AccountUsecase) Add(c *CreateAccountCommand) {
 	au.service.CreateNewAccount(c)
 }
 
@@ -43,7 +44,7 @@ type DepositCommand struct {
 }
 
 func (au *AccountUsecase) Deposit(dc *DepositCommand) {
-  // TODO: save deposit history
+	// TODO: save deposit history
 	target, _ := au.repo.Get(dc.Name)
 	added, _ := target.Amount.Add(money.New(int64(dc.Amount), target.Amount.Currency().Code))
 	target.Amount = added
