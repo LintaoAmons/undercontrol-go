@@ -9,6 +9,7 @@ import (
 )
 
 func SetupPostgres() *sql.DB {
+  // TODO: use config as db password and host etc.
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
 		"postgres",
 		"password",
