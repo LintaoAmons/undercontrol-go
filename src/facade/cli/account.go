@@ -49,3 +49,20 @@ func Add() {
 	})
 	logger.Info("Created successfully")
 }
+
+func Get(name *string) {
+	var nameInput string
+	if name == nil {
+		nameInput, _ = pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Name")
+	} else {
+		nameInput = *name
+	}
+	a, _ := u.Get(nameInput)
+	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
+	accountInfo := map[string]any{
+		"Name":   a.Name,
+		"Amount": a.Amount.Absolute().Display(),
+	}
+	logger.Info("========== Account Info ===========",
+		logger.ArgsFromMap(accountInfo))
+}

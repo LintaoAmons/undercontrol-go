@@ -4,8 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/LintaoAmons/undercontrol/src/usecase"
-	"github.com/pterm/pterm"
+	"github.com/LintaoAmons/undercontrol/src/facade/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -14,21 +13,11 @@ var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get an account by account name",
 	Run: func(cmd *cobra.Command, args []string) {
-		var name string
+		var name *string = nil
 		if len(args) > 0 {
-			name = args[0]
-		} else {
-			name, _ = pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Name")
+			name = &args[0]
 		}
-		usecase := usecase.NewAccountUsecase()
-		a, _ := usecase.Get(name)
-		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
-		accountInfo := map[string]any{
-			"Name":   a.Name,
-			"Amount": a.Amount.Absolute().Display(),
-		}
-		logger.Info("========== Account Info ===========",
-			logger.ArgsFromMap(accountInfo))
+		cli.Get(name)
 	},
 }
 
