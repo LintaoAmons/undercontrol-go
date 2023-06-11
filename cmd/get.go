@@ -4,8 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/LintaoAmons/undercontrol/src/domain/usecase"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -19,11 +18,17 @@ var getCmd = &cobra.Command{
 		if len(args) > 0 {
 			name = args[0]
 		} else {
-      name, _ = pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Name")
+			name, _ = pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Name")
 		}
-    // TODO: use UsecaseFactory
-
-		fmt.Println(name)
+		usecase := usecase.NewAccountUsecase()
+		a, _ := usecase.Get(name)
+		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
+		accountInfo := map[string]any{
+			"Name":   a.Name,
+			"Amount": a.Amount.Absolute().Display(),
+		}
+		logger.Info("========== Account Info ===========",
+			logger.ArgsFromMap(accountInfo))
 	},
 }
 

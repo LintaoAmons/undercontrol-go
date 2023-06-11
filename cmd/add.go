@@ -32,6 +32,9 @@ var addCmd = &cobra.Command{
       panic("Invalid Amount") // TODO: is there another way to exit the app other than panic?
 		}
 		currency, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Currency of this account(CNY)")
+    if currency == "" {
+      currency = "CNY"
+    }
 
 		service := account.NewAccountService(accountP.NewAccountRepository())
 		service.CreateNewAccount(&account.CreateAccountCommand{
