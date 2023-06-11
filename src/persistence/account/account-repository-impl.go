@@ -6,6 +6,7 @@ import (
 	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/model"
 	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/table"
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
+	setup "github.com/LintaoAmons/undercontrol/src/persistence/common"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-jet/jet/v2/postgres"
 	"github.com/pterm/pterm"
@@ -16,7 +17,9 @@ type AccountRepositoryImpl struct {
 	logger *pterm.Logger
 }
 
-func NewAccountRepository(db *sql.DB, logger *pterm.Logger) domain.AccountRepository {
+func NewAccountRepository() domain.AccountRepository {
+	db := setup.SetupPostgres()
+	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
 	return &AccountRepositoryImpl{db: db, logger: logger}
 }
 
@@ -93,7 +96,7 @@ func (ar *AccountRepositoryImpl) Find(name string) *domain.Account {
 	return nil
 }
 
-func (ar *AccountRepositoryImpl) FindAll() *[]domain.Account {
+func (ar *AccountRepositoryImpl) FindAll() []*domain.Account {
 	x := table.Account.
 		SELECT(table.Account.AllColumns)
 
@@ -103,10 +106,10 @@ func (ar *AccountRepositoryImpl) FindAll() *[]domain.Account {
 	}
 	x.Query(ar.db, &dest)
 
-	result := []domain.Account{}
+	result := []*domain.Account{}
 	for _, v := range dest {
-		result = append(result, *AccountPoToDomain(&v.Account))
+		result = append(result, AccountPoToDomain(&v.Account))
 	}
 
-	return &result
+	return result
 }

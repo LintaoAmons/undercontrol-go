@@ -6,10 +6,8 @@ import (
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
 	. "github.com/LintaoAmons/undercontrol/src/persistence/account"
-	setup "github.com/LintaoAmons/undercontrol/src/persistence/common"
 	"github.com/Rhymond/go-money"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/pterm/pterm"
 )
 
 func Test_Save(t *testing.T) {
@@ -59,7 +57,5 @@ func Test_FindAll(t *testing.T) {
 }
 
 func initRepo() domain.AccountRepository {
-	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelTrace).WithMaxWidth(200)
-
-	return NewAccountRepository(setup.SetupPostgres(), logger)
+	return NewAccountRepository()
 }

@@ -20,5 +20,5 @@ type AccountRepository interface {
 
 	Get(name string) (*Account, error)
 	Find(name string) *Account
-	FindAll() *[]Account
+	FindAll() []*Account
 }
