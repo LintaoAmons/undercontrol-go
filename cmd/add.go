@@ -20,7 +20,17 @@ var addCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		name, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Your new account name(Unnamed)")
 		amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
-		amount, _ := strconv.Atoi(amountStr) // TODO: handle error
+		amount, err := strconv.Atoi(amountStr) // TODO: handle error
+		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
+		if err != nil {
+			logger.Error("Invalid amount", []pterm.LoggerArgument{
+				{
+					Key:   "Your input",
+					Value: "[" + amountStr + "]",
+				},
+			})
+      panic("Invalid Amount") // TODO: is there another way to exit the app other than panic?
+		}
 		currency, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Currency of this account(CNY)")
 
 		service := account.NewAccountService(accountP.NewAccountRepository())
@@ -29,7 +39,6 @@ var addCmd = &cobra.Command{
 			Amount:   amount,
 			Currency: currency,
 		})
-		logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo).WithMaxWidth(200)
 		logger.Info("Created successfully")
 	},
 }
