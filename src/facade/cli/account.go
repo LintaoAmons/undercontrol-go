@@ -90,3 +90,26 @@ func Deposit() {
 	pterm.Info.Println("Deposit successfully")
 	pterm.Info.Printfln("Account [%s]: %s", after.Name, after.Amount.Display())
 }
+
+func Withdraw() {
+	accounts := u.FindAll()
+	var options []string
+	for _, v := range accounts {
+		options = append(options, fmt.Sprint(v.Name+": "+v.Amount.Display()))
+	}
+	selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show("Select the account you want withdraw money out")
+	selectedName := strings.Split(selectedOption, ":")[0]
+
+	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		pterm.Info.Printfln("Invalid amount")
+	}
+	u.Withdarw(&usecase.WithdarwCommand{
+		Name:   selectedName,
+		Amount: amount,
+	})
+	after, _ := u.Get(selectedName)
+	pterm.Info.Println("Withdarw successfully")
+	pterm.Info.Printfln("Account [%s]: %s", after.Name, after.Amount.Display())
+}
