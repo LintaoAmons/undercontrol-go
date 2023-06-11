@@ -15,12 +15,6 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all accounts",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		repo := account.NewAccountRepository()
 		accounts := repo.FindAll()
@@ -28,7 +22,6 @@ to quickly create a Cobra application.`,
     rows = append(rows, []string{"Name", "Amount", "Currency"})
 		for _, v := range accounts {
       rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Absolute().Amount()), v.Amount.Currency().Code})
-			// rows[i] = []string{v.Name, fmt.Sprint(v.Amount.Absolute().Amount()), v.Amount.Currency().Code}
 		}
 		pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
 	},
