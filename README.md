@@ -1,3 +1,13 @@
+## Commands
+
+### account
+#### add
+![add](https://github.com/LintaoAmons/undercontrol-go/assets/95092244/3f6b50ea-0e5c-4e8a-8251-af5264d8764f)
+
+#### list
+
+![image](https://github.com/LintaoAmons/undercontrol-go/assets/95092244/2f81b758-1d36-456d-9cfc-5e9a76c5047a)
+
 ## Tech Stack
 
 - User i/o
