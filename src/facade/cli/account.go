@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/LintaoAmons/undercontrol/src/usecase"
+	"github.com/LintaoAmons/undercontrol/src/utils/moneyutil"
+	"github.com/Rhymond/go-money"
 	"github.com/pterm/pterm"
 )
 
@@ -19,7 +21,16 @@ func List() {
 		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
 	}
 	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
-  // TODO: display total; display percentage
+	moneyList := func() []*money.Money {
+		r := []*money.Money{}
+		for _, v := range accounts {
+			r = append(r, v.Amount)
+		}
+		return r
+	}()
+	sum := moneyutil.Sum("CNY", moneyList...)
+	pterm.Info.Println("TOTAL: " + sum.Display())
+	// TODO: display percentage
 }
 
 func Add() {
