@@ -1,4 +1,4 @@
-POSTGRESQL_URL = postgresql://postgres:password@localhost:5432/undercontrol?sslmode=disable
+POSTGRESQL_URL = postgresql://postgres:password@localhost:5433/undercontrol?sslmode=disable
 
 .PHONY: init-local-db
 init-local-db:

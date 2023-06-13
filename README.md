@@ -15,3 +15,6 @@
         - [atlas](https://atlasgo.io/)
         - Next time may try `atlas`'s declarative way of migration
     - [go-jet](https://github.com/go-jet/jet)
+
+## TODO
+- [ ] Export data as encrypted file, restore by the file

@@ -9,13 +9,13 @@ import (
 )
 
 func SetupPostgres() *sql.DB {
-  // TODO: use config as db password and host etc.
+	// TODO: use config as db password and host etc.
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
 		"postgres",
 		"password",
 		"undercontrol",
 		"localhost",
-		"5432",
+		"5433",
 	)
 
 	db, err := sql.Open("postgres", connStr)
