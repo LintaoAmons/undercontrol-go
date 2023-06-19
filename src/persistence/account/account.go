@@ -1,14 +1,15 @@
 package account
 
 import (
+	"github.com/LintaoAmons/go-money"
 	b "github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/model"
 	a "github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
-	"github.com/Rhymond/go-money"
+	"github.com/shopspring/decimal"
 )
 
 func AccountConvert(i *a.Account) *b.Account {
-	amount := i.Amount.Absolute().Amount()
+	amount := i.Amount.GetAmount().String()
 	currencyCode := i.Amount.Currency().Code
 	return &b.Account{
 		ID:           0, // ID won't be used when INSERT OR UPDATE
@@ -24,7 +25,8 @@ func AccountConvert(i *a.Account) *b.Account {
 }
 
 func AccountPoToDomain(i *b.Account) *a.Account {
-	money := money.New(*i.Amount, *i.CurrencyCode)
+	amount, _ := decimal.NewFromString(*i.Amount) // TODO: check error
+	money := money.New(amount, *i.CurrencyCode)
 	return &a.Account{
 		Name:   i.Name,
 		Amount: money,

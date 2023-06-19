@@ -16,7 +16,7 @@
 - Core system
 	- golang
 	- [viper](https://github.com/spf13/viper)
-    - [go-money](https://github.com/Rhymond/go-money)
+    - [go-money](https://github.com/LintaoAmons/go-money)
 - Persistency
 	- Postgres
     - Database Migration

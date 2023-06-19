@@ -3,11 +3,12 @@ package account_test
 import (
 	"testing"
 
+	"github.com/LintaoAmons/go-money"
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
 	. "github.com/LintaoAmons/undercontrol/src/persistence/account"
-	"github.com/Rhymond/go-money"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/shopspring/decimal"
 )
 
 func Test_Save(t *testing.T) {
@@ -15,7 +16,7 @@ func Test_Save(t *testing.T) {
 
 	repo.Save(&domain.Account{
 		Name:   "Test4",
-		Amount: money.New(1234, money.CNY),
+		Amount: money.New(decimal.NewFromInt(1234), money.CNY),
 		Audit:  common.DefaultAudit(),
 	})
 }
@@ -25,7 +26,7 @@ func Test_Insert(t *testing.T) {
 
 	repo.Insert(&domain.Account{
 		Name:   "Test3",
-		Amount: money.New(1234, money.CNY),
+		Amount: money.New(decimal.NewFromInt(1234), money.CNY),
 		Audit:  common.DefaultAudit(),
 	})
 }
@@ -35,7 +36,7 @@ func Test_Update(t *testing.T) {
 
 	repo.Update(&domain.Account{
 		Name:   "Test3",
-		Amount: money.New(343, money.CNY),
+		Amount: money.New(decimal.NewFromInt(1234), money.CNY),
 		Audit:  common.DefaultAudit(),
 	})
 }

@@ -1,9 +1,10 @@
 package account
 
 import (
+	"github.com/LintaoAmons/go-money"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
-	"github.com/Rhymond/go-money"
 	"github.com/pterm/pterm"
+	"github.com/shopspring/decimal"
 )
 
 type AccountService struct {
@@ -28,7 +29,7 @@ type CreateAccountCommand struct {
 func (cac CreateAccountCommand) create() *Account {
 	return &Account{
 		Name:   cac.Name,
-		Amount: money.NewFromFloat(cac.Amount, cac.Currency),
+		Amount: money.New(decimal.NewFromFloat(cac.Amount), cac.Currency),
 		Audit:  common.DefaultAudit(),
 	}
 }

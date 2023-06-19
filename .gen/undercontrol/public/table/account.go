@@ -19,7 +19,7 @@ type accountTable struct {
 	//Columns
 	ID           postgres.ColumnInteger
 	Name         postgres.ColumnString
-	Amount       postgres.ColumnInteger
+	Amount       postgres.ColumnString
 	CurrencyCode postgres.ColumnString
 	CreatedAt    postgres.ColumnTimestampz
 	CreatedBy    postgres.ColumnString
@@ -67,7 +67,7 @@ func newAccountTableImpl(schemaName, tableName, alias string) accountTable {
 	var (
 		IDColumn           = postgres.IntegerColumn("id")
 		NameColumn         = postgres.StringColumn("name")
-		AmountColumn       = postgres.IntegerColumn("amount")
+		AmountColumn       = postgres.StringColumn("amount")
 		CurrencyCodeColumn = postgres.StringColumn("currency_code")
 		CreatedAtColumn    = postgres.TimestampzColumn("created_at")
 		CreatedByColumn    = postgres.StringColumn("created_by")

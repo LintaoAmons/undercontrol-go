@@ -14,7 +14,7 @@ import (
 type Account struct {
 	ID           int32 `sql:"primary_key"`
 	Name         string
-	Amount       *int64
+	Amount       *string
 	CurrencyCode *string
 	CreatedAt    *time.Time
 	CreatedBy    *string

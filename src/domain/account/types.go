@@ -1,8 +1,8 @@
 package account
 
 import (
+	. "github.com/LintaoAmons/go-money"
 	common "github.com/LintaoAmons/undercontrol/src/domain/common"
-	. "github.com/Rhymond/go-money"
 )
 
 type Account struct {
@@ -13,7 +13,7 @@ type Account struct {
 }
 
 type AccountRepository interface {
-  // TODO: int32 to string. use Name as pk
+	// TODO: int32 to string. use Name as pk
 	Insert(a *Account) (int32, error)
 	Update(a *Account) (int32, error)
 	Save(a *Account) (id int32)

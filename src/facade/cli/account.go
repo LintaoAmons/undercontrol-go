@@ -5,9 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/LintaoAmons/go-money"
 	"github.com/LintaoAmons/undercontrol/src/usecase"
-	"github.com/LintaoAmons/undercontrol/src/utils/moneyutil"
-	"github.com/Rhymond/go-money"
 	"github.com/pterm/pterm"
 )
 
@@ -21,14 +20,14 @@ func List() {
 		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
 	}
 	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
-	moneyList := func() []*money.Money {
-		r := []*money.Money{}
+	sum := func() *money.Money {
+		r := money.NewFromFloat(0, "CNY")
 		for _, v := range accounts {
-			r = append(r, v.Amount)
+			exchangeRate := 5.3
+			r, _ = r.Add(v.Amount.Convert("CNY", &exchangeRate))
 		}
 		return r
 	}()
-	sum := moneyutil.Sum("CNY", moneyList...)
 	pterm.Info.Println("TOTAL: " + sum.Display())
 	// TODO: display percentage
 }
@@ -75,7 +74,7 @@ func Get(name *string) {
 	logger := pterm.DefaultLogger.WithLevel(pterm.LogLevelInfo)
 	accountInfo := map[string]any{
 		"Name":   a.Name,
-		"Amount": a.Amount.Absolute().Display(),
+		"Amount": a.Amount.Display(),
 	}
 	logger.Info("========== Account Info ===========",
 		logger.ArgsFromMap(accountInfo))
