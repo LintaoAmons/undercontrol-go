@@ -1,22 +1,36 @@
 package usecase
 
 import (
-	"time"
-
-	"github.com/LintaoAmons/go-money"
 	accountP "github.com/LintaoAmons/undercontrol/src/persistence/account"
+	"github.com/LintaoAmons/undercontrol/src/persistence/common"
 
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
 )
 
+// HACK:
+// Usecase should
+// 1. Either a transparent call of one domain service method or domain method
+// 2. Or an orchestration of several domains
+// Transactional at this level should be catered very carefully since it may involves multi schemas or multi datasources
+
+// 关于跨层调用: 主要目的还是让数据变动可控，增删改的操作能集中在某个层一览无余，而不用担心数据在某个未知角落被奇怪的操作修改
+// 如果是 读: 外部知道核心的API，直接依赖核心也无所谓.而且也没有Transction需要操心
+//
+//	比如 一个 controler, 作为系统最外层，如果只是 list 一些资源，直接依赖 Repo 调用方法也行
+//
+// 如果涉及写： 就要严格的一层一层的调用, 要重点考虑如何保证数据一致性，如何实现Transaction
+// 这时候，读写分离就能很明显地强制要求每个开发对读写进行分类，并按照各自的规则进行依赖以及调用
 type AccountUsecase struct {
 	repo    account.AccountRepository
-	service *account.AccountService
+	service account.AccountService
 }
 
 func NewAccountUsecase() *AccountUsecase {
 	repo := accountP.NewAccountRepository()
-	service := account.NewAccountService(repo)
+	histRepo := accountP.NewAccountHistoryPostgresRepo()
+	txnManage := common.NewTxManagerPostgres()
+	// TODO: Account Factory, how to init only one instance of each type
+	service := account.NewAccountService(repo, histRepo, txnManage)
 	return &AccountUsecase{
 		repo:    repo,
 		service: service,
@@ -29,7 +43,7 @@ func (au *AccountUsecase) FindAll() []*account.Account {
 
 type CreateAccountCommand = account.CreateAccountCommand
 
-func (au *AccountUsecase) Add(c *CreateAccountCommand) {
+func (au *AccountUsecase) Add(c CreateAccountCommand) {
 	au.service.CreateNewAccount(c)
 }
 
@@ -39,27 +53,20 @@ func (au *AccountUsecase) Get(name string) (*account.Account, error) {
 	return result, err
 }
 
-type DepositCommand struct {
-	Name   string
-	Amount float64
+type DepositCommand = account.DepositCommand
+
+func (au *AccountUsecase) Deposit(dc DepositCommand) {
+	au.service.Deposit(dc)
 }
 
-func (au *AccountUsecase) Deposit(dc *DepositCommand) {
-	// TODO: save deposit history
-	target, _ := au.repo.Get(dc.Name)
-	added, _ := target.Amount.Add(money.NewFromFloat(dc.Amount, target.Amount.Currency().Code))
-	target.Amount = added
-	target.Audit.UpdatedAt = time.Now()
-	au.repo.Save(target)
+type WithdarwCommand = account.WithdarwCommand
+
+func (au *AccountUsecase) Withdarw(command WithdarwCommand) {
+	au.service.Withdarw(command)
 }
 
-type WithdarwCommand = DepositCommand
+type Calibratecommand = account.CalibrateCommand
 
-func (au *AccountUsecase) Withdarw(dc *WithdarwCommand) {
-	// TODO: save Withdarw history
-	target, _ := au.repo.Get(dc.Name)
-	added, _ := target.Amount.Add(money.NewFromFloat(-dc.Amount, target.Amount.Currency().Code))
-	target.Amount = added
-	target.Audit.UpdatedAt = time.Now()
-	au.repo.Save(target)
+func (au *AccountUsecase) Calibrate(command Calibratecommand) {
+	au.service.Calibrate(command)
 }

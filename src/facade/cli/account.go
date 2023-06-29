@@ -6,25 +6,41 @@ import (
 	"strings"
 
 	"github.com/LintaoAmons/go-money"
+	"github.com/LintaoAmons/undercontrol/src/domain/account"
+	accountP "github.com/LintaoAmons/undercontrol/src/persistence/account"
 	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
 )
 
 var u = usecase.NewAccountUsecase()
+var histRepo = accountP.NewAccountHistoryPostgresRepo()
+
+func Set() {
+	selectedName := selectAccount()
+	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		pterm.Info.Printfln("Invalid amount")
+	}
+	currencyCode, _ := pterm.DefaultInteractiveTextInput.
+		WithDefaultText("CNY").
+		WithMultiLine(false).Show("Currency code(CNY)")
+
+	u.Calibrate(account.CalibrateCommand{
+		Name:         selectedName,
+		Amount:       amount,
+		CurrencyCode: currencyCode,
+	})
+}
 
 func List() {
 	accounts := u.FindAll()
-	rows := [][]string{}
-	rows = append(rows, []string{"Name", "Amount", "Currency"})
-	for _, v := range accounts {
-		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
-	}
-	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
+	displayAccountAsTable(accounts)
+
 	sum := func() *money.Money {
 		r := money.NewFromFloat(0, "CNY")
 		for _, v := range accounts {
-			exchangeRate := 5.3
-			r, _ = r.Add(v.Amount.Convert("CNY", &exchangeRate))
+			r, _ = r.Add(v.Amount.Convert("CNY", nil))
 		}
 		return r
 	}()
@@ -55,7 +71,7 @@ func Add() {
 		currency = "CNY"
 	}
 
-	u.Add(&usecase.CreateAccountCommand{
+	u.Add(usecase.CreateAccountCommand{
 		Name:     name,
 		Amount:   amount,
 		Currency: currency,
@@ -94,7 +110,7 @@ func Deposit() {
 	if err != nil {
 		pterm.Info.Printfln("Invalid amount")
 	}
-	u.Deposit(&usecase.DepositCommand{
+	u.Deposit(usecase.DepositCommand{
 		Name:   selectedName,
 		Amount: amount,
 	})
@@ -104,6 +120,30 @@ func Deposit() {
 }
 
 func Withdraw() {
+	selectedName := selectAccount()
+
+	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		pterm.Info.Printfln("Invalid amount")
+	}
+	u.Withdarw(usecase.WithdarwCommand{
+		Name:   selectedName,
+		Amount: amount,
+	})
+	after, _ := u.Get(selectedName)
+	pterm.Info.Println("Withdarw successfully")
+	pterm.Info.Printfln("Account [%s]: %s", after.Name, after.Amount.Display())
+}
+
+func History() {
+	selectedName := selectAccount()
+
+	accontHisotries := histRepo.FindAllOf(selectedName)
+	displayAccountAsTableWithTime(accontHisotries)
+}
+
+func selectAccount() string {
 	accounts := u.FindAll()
 	var options []string
 	for _, v := range accounts {
@@ -111,17 +151,34 @@ func Withdraw() {
 	}
 	selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show("Select the account you want withdraw money out")
 	selectedName := strings.Split(selectedOption, ":")[0]
+	return selectedName
+}
 
-	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount")
-	amount, err := strconv.ParseFloat(amountStr, 64)
-	if err != nil {
-		pterm.Info.Printfln("Invalid amount")
+// func selectCurrency() []string {
+// TODO: expose money Currencies to allow user select the currency code
+// keys := make([]string, 0, len(money.con))
+// for k := range money.Currencies {
+// 	keys = append(keys, k)
+// }
+
+// return keys
+// }
+
+// TODO: merge the following functions
+func displayAccountAsTable(accounts []*account.Account) {
+	rows := [][]string{}
+	rows = append(rows, []string{"Name", "Amount", "Currency"})
+	for _, v := range accounts {
+		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code})
 	}
-	u.Withdarw(&usecase.WithdarwCommand{
-		Name:   selectedName,
-		Amount: amount,
-	})
-	after, _ := u.Get(selectedName)
-	pterm.Info.Println("Withdarw successfully")
-	pterm.Info.Printfln("Account [%s]: %s", after.Name, after.Amount.Display())
+	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
+}
+
+func displayAccountAsTableWithTime(accounts []*account.Account) {
+	rows := [][]string{}
+	rows = append(rows, []string{"Name", "Amount", "Currency", "ChangeTime"})
+	for _, v := range accounts {
+		rows = append(rows, []string{v.Name, fmt.Sprint(v.Amount.Display()), v.Amount.Currency().Code, v.CreatedAt.Format("02-01-2006 15:04:05")})
+	}
+	pterm.DefaultTable.WithHasHeader().WithData(rows).Render()
 }

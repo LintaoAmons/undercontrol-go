@@ -1,11 +1,13 @@
 package account
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/model"
 	"github.com/LintaoAmons/undercontrol/.gen/undercontrol/public/table"
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
+	"github.com/LintaoAmons/undercontrol/src/domain/common"
 	setup "github.com/LintaoAmons/undercontrol/src/persistence/common"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-jet/jet/v2/postgres"
@@ -23,21 +25,25 @@ func NewAccountRepository() domain.AccountRepository {
 	return &AccountRepositoryImpl{db: db, logger: logger}
 }
 
-func (ar *AccountRepositoryImpl) Save(a *domain.Account) (id int32) {
+func NewAccountReadRepo() domain.AccountReadRepo {
+	return NewAccountRepository()
+}
+
+func (ar *AccountRepositoryImpl) Save(tx common.Tx, a *domain.Account) (id int32) {
 	po := AccountConvert(a)
 	x := table.Account.SELECT(table.Account.Name).WHERE(table.Account.Name.EQ(postgres.String(po.Name)))
 	ar.logger.Trace(x.DebugSql())
 	dest := []string{}
 	x.Query(ar.db, &dest)
 	if len(dest) > 0 {
-		ar.Update(a)
+		ar.Update(tx, a)
 	} else {
-		ar.Insert(a)
+		ar.Insert(tx, a)
 	}
 	return 1
 }
 
-func (ar *AccountRepositoryImpl) Update(a *domain.Account) (int32, error) {
+func (ar *AccountRepositoryImpl) Update(tx common.Tx, a *domain.Account) (int32, error) {
 	po := AccountConvert(a)
 	x := table.Account.
 		UPDATE(
@@ -49,7 +55,7 @@ func (ar *AccountRepositoryImpl) Update(a *domain.Account) (int32, error) {
 		MODEL(po).
 		WHERE(table.Account.Name.EQ(postgres.String(po.Name)))
 	ar.logger.Trace(x.DebugSql())
-	_, err := x.Exec(ar.db)
+	_, err := x.ExecContext(context.TODO(), tx.(*sql.Tx))
 	if err != nil {
 		ar.logger.Error(spew.Sdump(err))
 		return 0, err
@@ -57,7 +63,7 @@ func (ar *AccountRepositoryImpl) Update(a *domain.Account) (int32, error) {
 	return po.ID, nil
 }
 
-func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
+func (ar *AccountRepositoryImpl) Insert(tx common.Tx, a *domain.Account) (int32, error) {
 	po := AccountConvert(a)
 	_, err := table.Account.
 		INSERT(table.Account.Name,
@@ -68,7 +74,7 @@ func (ar *AccountRepositoryImpl) Insert(a *domain.Account) (int32, error) {
 			table.Account.UpdatedAt,
 			table.Account.UpdatedBy).
 		MODEL(po).
-		Exec(ar.db)
+		ExecContext(context.TODO(), tx.(*sql.Tx))
 	if err != nil {
 		ar.logger.Error(spew.Sdump(err))
 		panic(err)

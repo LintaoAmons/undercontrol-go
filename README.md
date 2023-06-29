@@ -27,4 +27,6 @@
     - [go-jet](https://github.com/go-jet/jet)
 
 ## TODO
+- [x] Show History of account
+- [ ] Add Context to init dependencies
 - [ ] Export data as encrypted file, restore by the file

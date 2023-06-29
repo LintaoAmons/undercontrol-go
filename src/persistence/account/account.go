@@ -38,3 +38,18 @@ func AccountPoToDomain(i *b.Account) *a.Account {
 		},
 	}
 }
+
+func AccountHistPoToDomain(i *b.AccountHistory) *a.AccountHistory {
+	amount, _ := decimal.NewFromString(*i.Amount) // TODO: check error
+	money := money.New(amount, *i.CurrencyCode)
+	return &a.Account{
+		Name:   i.Name,
+		Amount: money,
+		Audit: common.Audit{
+			CreatedAt: *i.CreatedAt,
+			CreatedBy: *i.CreatedBy,
+			UpdatedAt: *i.UpdatedAt,
+			UpdatedBy: *i.UpdatedBy,
+		},
+	}
+}

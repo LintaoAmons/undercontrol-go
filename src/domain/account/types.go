@@ -12,13 +12,62 @@ type Account struct {
 	common.Audit
 }
 
+type CreateAccountCommand struct {
+	Name     string
+	Amount   float64
+	Currency string
+}
+
+type DepositCommand struct {
+	Name   string
+	Amount float64
+}
+
+type (
+	WithdarwCommand = DepositCommand
+)
+
+type CalibrateCommand struct {
+	Name         string
+	Amount       float64
+	CurrencyCode string
+}
+
+type DeleteCommand struct {
+	// TODO:
+}
+
+type AccountService interface {
+	CreateNewAccount(command CreateAccountCommand)
+	Calibrate(command CalibrateCommand)
+	Withdarw(command WithdarwCommand)
+	Deposit(dc DepositCommand)
+	Delete(command DeleteCommand)
+}
+
+// Read & Write APIs
 type AccountRepository interface {
 	// TODO: int32 to string. use Name as pk
-	Insert(a *Account) (int32, error)
-	Update(a *Account) (int32, error)
-	Save(a *Account) (id int32)
+	Insert(tx common.Tx, a *Account) (int32, error)
+	Update(tx common.Tx, a *Account) (int32, error)
+	Save(tx common.Tx, a *Account) (id int32)
 
 	Get(name string) (*Account, error)
 	Find(name string) *Account
 	FindAll() []*Account
+}
+
+// Only read APIs
+type AccountReadRepo interface {
+	Get(name string) (*Account, error)
+	Find(name string) *Account
+	FindAll() []*Account
+}
+
+type AccountHistory = Account
+
+type AccountHistoryRepo interface {
+	Insert(tx common.Tx, a *AccountHistory) (string, error)
+
+	FindAllOf(name string) []*AccountHistory
 }
