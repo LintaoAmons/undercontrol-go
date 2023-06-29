@@ -108,7 +108,8 @@ func Deposit() {
 	amountStr, _ := pterm.DefaultInteractiveTextInput.WithMultiLine(false).Show("Amount of this account(0)")
 	amount, err := strconv.ParseFloat(amountStr, 64)
 	if err != nil {
-		pterm.Info.Printfln("Invalid amount")
+		pterm.Error.Printfln("Invalid amount")
+		panic("Invalid amount")
 	}
 	u.Deposit(usecase.DepositCommand{
 		Name:   selectedName,

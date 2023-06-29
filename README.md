@@ -1,3 +1,11 @@
+## Local Test
+
+Clone this repo and run
+
+```
+make setup-local
+```
+
 ## Commands
 
 ### account

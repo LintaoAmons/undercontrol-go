@@ -1,0 +1,27 @@
+# TODO: This is not correct since utlgo is not a server can run as a daemon
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: utlgo
+  name: utlgo
+spec:
+  containers:
+  - image: utlgo:e15c9fb
+    name: utlgo
+    resources: {}
+  - name: postgres
+    image: postgres
+    ports:
+    - containerPort: 5432
+    volumeMounts:
+    - name: utl-db
+      mountPath: /var/lib/postgresql/data
+  volumes:
+  - name: utl-db
+    hostPath:
+      path: $(HOME)/.local/share/utlgo
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
