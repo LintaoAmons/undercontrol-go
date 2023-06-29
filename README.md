@@ -6,6 +6,8 @@ Clone this repo and run
 make setup-local
 ```
 
+![show](https://github.com/LintaoAmons/undercontrol-go/assets/95092244/cebd9f42-3d69-481d-9382-cd66f7e801f4)
+
 ## Commands
 
 ### account
