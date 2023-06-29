@@ -15,7 +15,7 @@ func SetupPostgres() *sql.DB {
 		"password",
 		"undercontrol",
 		"localhost",
-		"5433",
+		"5432",
 	)
 
 	db, err := sql.Open("postgres", connStr)
