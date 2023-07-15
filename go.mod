@@ -3,7 +3,7 @@ module github.com/LintaoAmons/undercontrol
 go 1.19
 
 require (
-	github.com/LintaoAmons/go-money v0.0.4
+	github.com/LintaoAmons/go-money v0.0.5
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-jet/jet/v2 v2.10.0
 	github.com/lib/pq v1.10.9

@@ -38,5 +38,6 @@ make setup-local
 
 ## TODO
 - [x] Show History of account
+- [ ] persistency: db as one json file
 - [ ] Add Context to init dependencies
 - [ ] Export data as encrypted file, restore by the file
