@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os/user"
 
 	_ "github.com/lib/pq"
 	"gopkg.in/yaml.v3"
@@ -42,7 +43,13 @@ func SetupPostgres() *sql.DB {
 }
 
 func (c *PostgresConfigs) GetConf() *PostgresConfigs {
-	yamlFile, err := ioutil.ReadFile("conf.yaml")
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
+	filePath := usr.HomeDir + "/.undercontrol.yaml"
+	yamlFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)
 	}
