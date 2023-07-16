@@ -3,37 +3,34 @@ package common
 import (
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	_ "github.com/lib/pq"
+	"gopkg.in/yaml.v3"
 )
 
-//go:generate gonstructor --type=PostgresConfigs --constructorTypes=builder
 type PostgresConfigs struct {
-	user     string
-	password string
-	host     string
-	port     string
-	dbname   string
-	sslmode  string
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Dbname   string `yaml:"dbname"`
+	Sslmode  string `yaml:"sslmode"`
 }
 
 func SetupPostgres() *sql.DB {
 	// TODO: use config as db password and host etc.go install golang.org/x/tools/cmd/goimports@latest
 	// viper.GetString("db.password") Why viper can't get the configuration here
-	config := NewPostgresConfigsBuilder().
-		User("postgres").
-		Password("password").
-		Dbname("undercontrol").
-		Host("localhost").
-		Port("5432").Build()
+	var config PostgresConfigs
+	config.GetConf()
 
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
-		config.user,
-		config.password,
-		config.dbname,
-		config.host,
-		config.port,
+		config.User,
+		config.Password,
+		config.Dbname,
+		config.Host,
+		config.Port,
 	)
 
 	db, err := sql.Open("postgres", connStr)
@@ -42,4 +39,17 @@ func SetupPostgres() *sql.DB {
 	}
 
 	return db
+}
+
+func (c *PostgresConfigs) GetConf() *PostgresConfigs {
+	yamlFile, err := ioutil.ReadFile("conf.yaml")
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+
+	return c
 }
