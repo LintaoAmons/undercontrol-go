@@ -8,14 +8,31 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//go:generate gonstructor --type=PostgresConfigs --constructorTypes=builder
+type PostgresConfigs struct {
+	user     string
+	password string
+	host     string
+	port     string
+	dbname   string
+	sslmode  string
+}
+
 func SetupPostgres() *sql.DB {
-	// TODO: use config as db password and host etc.
+	// TODO: use config as db password and host etc.go install golang.org/x/tools/cmd/goimports@latest
+	config := NewPostgresConfigsBuilder().
+		User("postgres").
+		Password("password").
+		Dbname("undercontrol").
+		Host("localhost").
+		Port("5432").Build()
+
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",
-		"postgres",
-		"password",
-		"undercontrol",
-		"localhost",
-		"5432",
+		config.user,
+		config.password,
+		config.dbname,
+		config.host,
+		config.port,
 	)
 
 	db, err := sql.Open("postgres", connStr)
