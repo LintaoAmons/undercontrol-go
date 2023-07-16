@@ -11,7 +11,7 @@ import (
 // setCmd represents the set command
 var setCmd = &cobra.Command{
 	Use:   "set",
-	Short: "A brief description of your command",
+	Short: "Directly set account amount",
 	Run: func(cmd *cobra.Command, args []string) {
 		cli.Set()
 	},
