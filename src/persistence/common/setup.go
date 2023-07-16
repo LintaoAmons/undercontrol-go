@@ -20,6 +20,7 @@ type PostgresConfigs struct {
 
 func SetupPostgres() *sql.DB {
 	// TODO: use config as db password and host etc.go install golang.org/x/tools/cmd/goimports@latest
+	// viper.GetString("db.password") Why viper can't get the configuration here
 	config := NewPostgresConfigsBuilder().
 		User("postgres").
 		Password("password").
