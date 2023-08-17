@@ -38,6 +38,8 @@ make setup-local
 
 ## TODO
 - [x] Show History of account
+- [ ] docker-compose and dockerfile
+  - [ ] extract env variable to allow docker-compose configuration
 - [ ] Configuration: db
 - [ ] Add Context to init dependencies
 - [ ] Export data as encrypted file, restore by the file

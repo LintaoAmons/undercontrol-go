@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  utlgo: # service name
+    image: utlgo:latest
+    environment: # TODO: build image with configurable variable
+      - "placeholder=Password1234"
+  undercontrol-db:
+    image: postgres
+    environment: 
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: local
+    volumes:
+      - undercontrol-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  - undercontrol-db:

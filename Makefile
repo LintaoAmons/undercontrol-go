@@ -20,11 +20,11 @@ gen-db-type: migrate-db-up
 
 .PHONY: build-image
 build-image:
-	docker build -t utlgo:$$(git rev-parse --short HEAD) .
+	docker build -t utlgo:$$(git rev-parse --short HEAD) -t utlgo:latest . 
 
 build-local-binary:
 	go build -o ~/.local/bin/$(BINARY_NAME) -trimpath main.go
 	chmod u+x ~/.local/bin/$(BINARY_NAME)
 
-setup-local: init-local-db migrate-db-up build-local-binary
-	utlgo help
+setup-local: init-local-db migrate-db-up build-image
+	docker-compose up # TODO:

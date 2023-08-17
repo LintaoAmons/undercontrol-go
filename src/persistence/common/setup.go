@@ -48,6 +48,7 @@ func (c *PostgresConfigs) GetConf() *PostgresConfigs {
 		panic(err)
 	}
 
+	// TODO: filepath as env
 	filePath := usr.HomeDir + "/.undercontrol.yaml"
 	yamlFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
