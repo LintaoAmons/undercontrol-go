@@ -24,7 +24,8 @@ func Set() {
 	}
 	currencyCode, _ := pterm.DefaultInteractiveTextInput.
 		WithDefaultText("CNY").
-		WithMultiLine(false).Show("Currency code(CNY)")
+		WithMultiLine(false).
+		Show("Currency code(CNY)")
 
 	u.Calibrate(account.CalibrateCommand{
 		Name:         selectedName,
