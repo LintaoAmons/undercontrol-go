@@ -6,7 +6,7 @@ import (
 	"github.com/LintaoAmons/go-money"
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
-	"github.com/LintaoAmons/undercontrol/src/persistence/account/entgo"
+	"github.com/LintaoAmons/undercontrol/src/persistence/entgo"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 )
