@@ -48,8 +48,6 @@ type AccountService interface {
 // Read & Write APIs
 type AccountRepository interface {
 	// TODO: int32 to string. use Name as pk
-	Insert(tx common.Tx, a *Account) (int32, error)
-	Update(tx common.Tx, a *Account) (int32, error)
 	Save(tx common.Tx, a *Account) (id int32)
 
 	Get(name string) (*Account, error)

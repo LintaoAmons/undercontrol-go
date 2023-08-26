@@ -11,10 +11,9 @@ type Audit struct {
 
 func DefaultAudit() Audit {
 	return Audit{
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().In(time.UTC),
 		CreatedBy: "system",
-		UpdatedAt: time.Now(),
+		UpdatedAt: time.Now().In(time.UTC),
 		UpdatedBy: "system",
 	}
 }
-
