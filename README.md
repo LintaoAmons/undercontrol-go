@@ -11,7 +11,9 @@ make setup-local
 ## Commands
 
 ### account
+
 #### add
+
 ![add](https://github.com/LintaoAmons/undercontrol-go/assets/95092244/3f6b50ea-0e5c-4e8a-8251-af5264d8764f)
 
 #### list
@@ -21,22 +23,24 @@ make setup-local
 ## Tech Stack
 
 - User i/o
-	- [cobra](https://github.com/spf13/cobra)
-	- [pterm](https://github.com/pterm/pterm)
+  - [cobra](https://github.com/spf13/cobra)
+  - [pterm](https://github.com/pterm/pterm)
 - Core system
-	- golang
-	- [viper](https://github.com/spf13/viper)
+  - golang
+  - [viper](https://github.com/spf13/viper)
     - [go-money](https://github.com/LintaoAmons/go-money)
 - Persistency
-	- Postgres
+  - Postgres
     - Database Migration
-        - ✅ [golang-migrate](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md)
-        - [goose](https://github.com/pressly/goose)
-        - [atlas](https://atlasgo.io/)
-        - Next time may try `atlas`'s declarative way of migration
+      - ✅ [golang-migrate](https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL.md)
+      - [goose](https://github.com/pressly/goose)
+      - [atlas](https://atlasgo.io/)
+      - Next time may try `atlas`'s declarative way of migration
     - [go-jet](https://github.com/go-jet/jet)
 
 ## TODO
+
+- [ ] InitDBClient connect string to configuration
 - [x] Show History of account
 - [ ] docker-compose and dockerfile
   - [ ] extract env variable to allow docker-compose configuration
