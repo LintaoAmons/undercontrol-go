@@ -8,7 +8,6 @@ import (
 	"github.com/LintaoAmons/undercontrol/ent/account"
 	domain "github.com/LintaoAmons/undercontrol/src/domain/account"
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/shopspring/decimal"
 )
 
@@ -54,6 +53,7 @@ func (repo *AccountEntRepo) FindAll() []*domain.Account {
 	for _, ac := range acList {
 		domains = append(domains, toDomain(ac))
 	}
+
 	return domains
 }
 

@@ -15,6 +15,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_FindAll(t *testing.T) {
+	repo := p.NewAccountEntRepo(initDBClient())
+	money := money.New(decimal.NewFromInt(1000), "CNY")
+
+	account2 := &account.Account{
+		Name:   "Test2",
+		Amount: money,
+		Audit:  common.DefaultAudit(),
+	}
+
+	account := &account.Account{
+		Name:   "Test",
+		Amount: money,
+		Audit:  common.DefaultAudit(),
+	}
+	repo.Save(nil, account)
+	repo.Save(nil, account2)
+
+	// Act
+	savedAccount := repo.FindAll()
+
+	// Assert
+	assert.Equal(t, len(savedAccount), 2)
+	//
+	// assert.Equal(t, account.Name, savedAccount.Name, "Expected Name to be equal")
+	// assert.Equal(t, account.Amount, savedAccount.Amount, "Expected Amount to be equal")
+	// assert.Equal(t, account.Audit, savedAccount.Audit, "Expected Audit to be equal")
+}
+
 func TestAccountEntRepo_Save(t *testing.T) {
 	repo := p.NewAccountEntRepo(initDBClient())
 	money := money.New(decimal.NewFromInt(1000), "CNY")
