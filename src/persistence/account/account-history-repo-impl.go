@@ -25,7 +25,7 @@ func NewAccountHistoryPostgresRepo() domain.AccountHistoryRepo {
 	return &AccountHistPostgresRepo{db: db, logger: logger}
 }
 
-func (r *AccountHistPostgresRepo) Insert(tx common.Tx, a *domain.AccountHistory) (string, error) {
+func (r *AccountHistPostgresRepo) Save(tx common.Tx, a *domain.AccountHistory) (string, error) {
 	po := AccountConvert(a)
 
 	_, err := table.AccountHistory.

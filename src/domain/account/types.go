@@ -65,7 +65,7 @@ type AccountReadRepo interface {
 type AccountHistory = Account
 
 type AccountHistoryRepo interface {
-	Insert(tx common.Tx, a *AccountHistory) (string, error)
+	Save(tx common.Tx, a *AccountHistory) (string, error)
 
 	FindAllOf(name string) []*AccountHistory
 }

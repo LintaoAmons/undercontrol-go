@@ -74,7 +74,7 @@ func (as *AccountServiceImpl) saveAccountAndHistory(a *Account) {
 	as.repo.Save(tx, a)
 	a.CreatedAt = time.Now()
 	a.UpdatedAt = time.Now()
-	as.histRepo.Insert(tx, a)
+	as.histRepo.Save(tx, a)
 	tx.Commit()
 }
 
