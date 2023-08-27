@@ -1,11 +1,7 @@
 package usecase
 
 import (
-	"context"
-	"log"
-
-	"entgo.io/ent/dialect"
-	"github.com/LintaoAmons/undercontrol/ent"
+	"github.com/LintaoAmons/undercontrol/src/persistence/entgo"
 	persistency "github.com/LintaoAmons/undercontrol/src/persistence/entgo/account"
 
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
@@ -31,20 +27,8 @@ type AccountUsecase struct {
 }
 
 // TODO: refactor the builder method. Maybe wired?
-func initDBClient() *ent.Client {
-	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&mecache=shared&_fk=1")
-	// client, err := ent.Open(dialect.SQLite, "file:ent?mecache=shared&_fk=1")
-	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
-	}
-	if err := client.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-	return client
-}
-
 func NewAccountUsecase() *AccountUsecase {
-	client := initDBClient()
+	client := entgo.InitDBClient()
 	repo := persistency.NewAccountEntRepo(client)
 	histRepo := persistency.NewAccountHistoryEntRepo(client)
 	// TODO: Account Factory, how to init only one instance of each type
