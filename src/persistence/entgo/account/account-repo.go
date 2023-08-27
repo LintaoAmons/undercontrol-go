@@ -31,7 +31,7 @@ func (repo *AccountEntRepo) Save(tx common.Tx, a *domain.Account) (id int32) {
 		SetUpdatedAt(a.UpdatedAt).
 		SetUpdatedBy(a.UpdatedBy).
 		SaveX(context.Background())
-	// TODO: remove the return value
+	// TODO: remove the return value, align with hist repo
 	return 0
 }
 func (repo *AccountEntRepo) Get(name string) (*domain.Account, error) {

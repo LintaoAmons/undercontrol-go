@@ -40,7 +40,8 @@ func TestAccountEntRepo_Save(t *testing.T) {
 }
 
 func initDBClient() *ent.Client {
-	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&mecache=shared&_fk=1")
+	// client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&mecache=shared&_fk=1")
+	client, err := ent.Open(dialect.SQLite, "file:ent?mecache=shared&_fk=1")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}

@@ -62,10 +62,26 @@ type AccountReadRepo interface {
 	FindAll() []*Account
 }
 
-type AccountHistory = Account
+type AccountHistory struct {
+	Id int
+	Account
+}
 
 type AccountHistoryRepo interface {
 	Save(tx common.Tx, a *AccountHistory) (string, error)
 
 	FindAllOf(name string) []*AccountHistory
+}
+
+func (a *Account) ToHistory(id *int) *AccountHistory {
+	var idValue int
+	if id == nil {
+		idValue = 0
+	} else {
+		idValue = *id
+	}
+	return &AccountHistory{
+		Id:      idValue,
+		Account: *a,
+	}
 }
