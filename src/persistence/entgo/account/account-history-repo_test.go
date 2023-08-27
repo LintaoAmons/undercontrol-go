@@ -8,6 +8,7 @@ import (
 	"github.com/LintaoAmons/undercontrol/src/domain/common"
 	p "github.com/LintaoAmons/undercontrol/src/persistence/entgo/account"
 	"github.com/shopspring/decimal"
+	"github.com/stretchr/testify/assert"
 	// "github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +19,7 @@ func TestAccountEntHistRepo_Save(t *testing.T) {
 	account1 := &account.AccountHistory{
 		Id: 0,
 		Account: account.Account{
-			Name:   "Test1",
+			Name:   "Test",
 			Amount: money,
 			Audit:  common.DefaultAudit(),
 		},
@@ -27,7 +28,7 @@ func TestAccountEntHistRepo_Save(t *testing.T) {
 	account2 := &account.AccountHistory{
 		Id: 0,
 		Account: account.Account{
-			Name:   "Test2",
+			Name:   "Test",
 			Amount: money,
 			Audit:  common.DefaultAudit(),
 		},
@@ -40,8 +41,9 @@ func TestAccountEntHistRepo_Save(t *testing.T) {
 	// TODO: test
 
 	// Assert
-	// savedAccounts := repo.FindAllOf("Test")
+	savedAccounts := repo.FindAllOf("Test")
 
+	assert.Equal(t, len(savedAccounts), 2)
 	// assert.Equal(t, account.Name, savedAccount.Name, "Expected Name to be equal")
 	// assert.Equal(t, account.Amount, savedAccount.Amount, "Expected Amount to be equal")
 	// assert.Equal(t, account.Audit, savedAccount.Audit, "Expected Audit to be equal")
