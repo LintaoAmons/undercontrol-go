@@ -11,6 +11,7 @@ import (
 	"github.com/LintaoAmons/go-money"
 	"github.com/LintaoAmons/undercontrol/ent"
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
+	"github.com/LintaoAmons/undercontrol/src/persistence/entgo"
 	persistence "github.com/LintaoAmons/undercontrol/src/persistence/entgo/account"
 	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
@@ -28,7 +29,7 @@ func initDBClient() *ent.Client {
 }
 
 var u = usecase.NewAccountUsecase()
-var histRepo = persistence.NewAccountHistoryEntRepo(initDBClient())
+var histRepo = persistence.NewAccountHistoryEntRepo(entgo.InitDBClient())
 
 func Set() {
 	selectedName := selectAccount()
