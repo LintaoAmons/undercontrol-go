@@ -1,10 +1,8 @@
-package entgo
+package account
 
 import (
 	"context"
-	"log"
 
-	"entgo.io/ent/dialect"
 	"github.com/LintaoAmons/go-money"
 	"github.com/LintaoAmons/undercontrol/ent"
 	"github.com/LintaoAmons/undercontrol/ent/account"
@@ -18,17 +16,9 @@ type AccountEntRepo struct {
 	client *ent.Client
 }
 
-func NewAccountEntRepo(dsn string) domain.AccountRepository {
-	client, err := ent.Open(dialect.SQLite, dsn)
-	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
-	}
-	if err := client.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-
+func NewAccountEntRepo(c *ent.Client) domain.AccountRepository {
 	return &AccountEntRepo{
-		client: client,
+		client: c,
 	}
 }
 
