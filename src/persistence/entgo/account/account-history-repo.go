@@ -34,7 +34,7 @@ func (r *AccountHistoryEntRepo) Save(tx common.Tx, a *account.AccountHistory) (s
 	// TODO: remove the return value
 	return a.Name, nil
 }
-func (r *AccountHistoryEntRepo) FindAllOf(name string) []*account.AccountHistory {
+func (r *AccountHistoryEntRepo) FindAllOf(name string) account.AccountHistories {
 	acList := r.client.AccountHistory.Query().
 		Where(accounthistory.NameEQ(name)).
 		AllX(context.Background())

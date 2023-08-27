@@ -1,10 +1,15 @@
 package usecase
 
 import (
-	accountP "github.com/LintaoAmons/undercontrol/src/persistence/account"
-	"github.com/LintaoAmons/undercontrol/src/persistence/common"
+	"context"
+	"log"
+
+	"entgo.io/ent/dialect"
+	"github.com/LintaoAmons/undercontrol/ent"
+	persistency "github.com/LintaoAmons/undercontrol/src/persistence/entgo/account"
 
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
+	"github.com/LintaoAmons/undercontrol/src/domain/common"
 )
 
 // HACK:
@@ -25,12 +30,25 @@ type AccountUsecase struct {
 	service account.AccountService
 }
 
+// TODO: refactor the builder method. Maybe wired?
+func initDBClient() *ent.Client {
+	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&mecache=shared&_fk=1")
+	// client, err := ent.Open(dialect.SQLite, "file:ent?mecache=shared&_fk=1")
+	if err != nil {
+		log.Fatalf("failed opening connection to sqlite: %v", err)
+	}
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+	return client
+}
+
 func NewAccountUsecase() *AccountUsecase {
-	repo := accountP.NewAccountRepository()
-	histRepo := accountP.NewAccountHistoryPostgresRepo()
-	txnManage := common.NewTxManagerPostgres()
+	client := initDBClient()
+	repo := persistency.NewAccountEntRepo(client)
+	histRepo := persistency.NewAccountHistoryEntRepo(client)
 	// TODO: Account Factory, how to init only one instance of each type
-	service := account.NewAccountService(repo, histRepo, txnManage)
+	service := account.NewAccountService(repo, histRepo, common.DefaultTxManager{})
 	return &AccountUsecase{
 		repo:    repo,
 		service: service,

@@ -1,19 +1,34 @@
 package cli
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
+	"entgo.io/ent/dialect"
 	"github.com/LintaoAmons/go-money"
+	"github.com/LintaoAmons/undercontrol/ent"
 	"github.com/LintaoAmons/undercontrol/src/domain/account"
-	accountP "github.com/LintaoAmons/undercontrol/src/persistence/account"
+	persistence "github.com/LintaoAmons/undercontrol/src/persistence/entgo/account"
 	"github.com/LintaoAmons/undercontrol/src/usecase"
 	"github.com/pterm/pterm"
 )
 
+func initDBClient() *ent.Client {
+	client, err := ent.Open(dialect.SQLite, "file:undercontrol.db?mecache=shared&_fk=1")
+	if err != nil {
+		log.Fatalf("failed opening connection to sqlite: %v", err)
+	}
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+	return client
+}
+
 var u = usecase.NewAccountUsecase()
-var histRepo = accountP.NewAccountHistoryPostgresRepo()
+var histRepo = persistence.NewAccountHistoryEntRepo(initDBClient())
 
 func Set() {
 	selectedName := selectAccount()
@@ -141,8 +156,8 @@ func Withdraw() {
 func History() {
 	selectedName := selectAccount()
 
-	accontHisotries := histRepo.FindAllOf(selectedName)
-	displayAccountAsTableWithTime(accontHisotries)
+	accountHistories := histRepo.FindAllOf(selectedName)
+	displayAccountAsTableWithTime(accountHistories.ToAccounts())
 }
 
 func selectAccount() string {

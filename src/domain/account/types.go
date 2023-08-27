@@ -70,7 +70,7 @@ type AccountHistory struct {
 type AccountHistoryRepo interface {
 	Save(tx common.Tx, a *AccountHistory) (string, error)
 
-	FindAllOf(name string) []*AccountHistory
+	FindAllOf(name string) AccountHistories
 }
 
 func (a *Account) ToHistory(id *int) *AccountHistory {
@@ -84,4 +84,19 @@ func (a *Account) ToHistory(id *int) *AccountHistory {
 		Id:      idValue,
 		Account: *a,
 	}
+}
+
+func (a *AccountHistory) ToAccount() *Account {
+	return &a.Account
+}
+
+type Accounts []*Account
+type AccountHistories []*AccountHistory
+
+func (a AccountHistories) ToAccounts() Accounts {
+	var res Accounts
+	for _, h := range a {
+		res = append(res, h.ToAccount())
+	}
+	return res
 }
