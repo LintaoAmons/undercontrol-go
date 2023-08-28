@@ -9,13 +9,20 @@ import (
 )
 
 type tuiModel struct {
-	Accounts []account.Account
+	Accounts   account.Accounts
+	NewAccount *account.Account
 }
 
 func (m tuiModel) Init() tea.Cmd {
 	// Just return `nil`, which means "no I/O right now, please."
 	return nil
 }
+
+// func (m tuiModel) AddNewAccount() tea.Cmd {
+// 	// ask user to input nessesary info: How to nested existing components??
+// 	// run usecase create account
+// 	// print OK/Err infomation
+// }
 
 func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -29,6 +36,8 @@ func (m tuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// These keys should exit the program.
 		case "ctrl+c", "q":
 			return m, tea.Quit
+			// case "a":
+			// 	return:
 		}
 	}
 
@@ -44,10 +53,9 @@ func (m tuiModel) View() string {
 }
 
 func InitTui() {
-    p := tea.NewProgram(tuiModel{}, tea.WithAltScreen())
-    if _, err := p.Run(); err != nil {
-        fmt.Printf("Alas, there's been an error: %v", err)
-        os.Exit(1)
-    }
+	p := tea.NewProgram(tuiModel{}, tea.WithAltScreen())
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Alas, there's been an error: %v", err)
+		os.Exit(1)
+	}
 }
-
