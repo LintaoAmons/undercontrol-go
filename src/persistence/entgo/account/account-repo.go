@@ -22,14 +22,32 @@ func NewAccountEntRepo(c *ent.Client) domain.AccountRepository {
 }
 
 func (repo *AccountEntRepo) Save(tx common.Tx, a *domain.Account) (id int32) {
-	repo.client.Account.Create().
-		SetName(a.Name).SetAmount(a.Amount.GetAmount().String()).
-		SetCurrencyCode(a.Amount.Currency().Code).
-		SetCreatedAt(a.CreatedAt).
-		SetCreatedBy(a.CreatedBy).
-		SetUpdatedAt(a.UpdatedAt).
-		SetUpdatedBy(a.UpdatedBy).
-		SaveX(context.Background())
+	exist := repo.client.Account.Query().
+		Where(account.NameEQ(a.Name)).
+		ExistX(context.Background())
+
+	if exist {
+		repo.client.Account.Update().Where(account.NameEQ(a.Name)).
+			SetName(a.Name).
+			SetAmount(a.Amount.GetAmount().String()).
+			SetCurrencyCode(a.Amount.Currency().Code).
+			SetCreatedAt(a.CreatedAt).
+			SetCreatedBy(a.CreatedBy).
+			SetUpdatedAt(a.UpdatedAt).
+			SetUpdatedBy(a.UpdatedBy).
+			SaveX(context.Background())
+	} else {
+		repo.client.Account.Create().
+			SetName(a.Name).
+			SetAmount(a.Amount.GetAmount().String()).
+			SetCurrencyCode(a.Amount.Currency().Code).
+			SetCreatedAt(a.CreatedAt).
+			SetCreatedBy(a.CreatedBy).
+			SetUpdatedAt(a.UpdatedAt).
+			SetUpdatedBy(a.UpdatedBy).
+			SaveX(context.Background())
+	}
+
 	// TODO: remove the return value, align with hist repo
 	return 0
 }
