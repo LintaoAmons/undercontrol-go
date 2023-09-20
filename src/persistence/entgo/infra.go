@@ -3,6 +3,7 @@ package entgo
 import (
 	"context"
 	"log"
+	"os"
 
 	"entgo.io/ent/dialect"
 	"github.com/LintaoAmons/undercontrol/ent"
@@ -13,7 +14,8 @@ var Client *ent.Client
 
 func InitDBClient() *ent.Client {
 	if Client == nil {
-		c, err := ent.Open(dialect.SQLite, "file:/Users/lintao/Documents/oatnil/release/undercontrol-go/ent-db?mecache=shared&_fk=1")
+		dbPath := os.Getenv("DATABASE_PATH")
+		c, err := ent.Open(dialect.SQLite, "file:"+dbPath+"?mecache=shared&_fk=1")
 		if err != nil {
 			log.Fatalf("failed opening connection to sqlite: %v", err)
 		}

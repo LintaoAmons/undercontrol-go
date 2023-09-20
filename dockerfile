@@ -43,11 +43,13 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
     ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
+ENV DATABASE_PATH=./ent-db
+
 # Copy the binary to the production image from the builder stage.
-COPY --from=builder /app/utlgo /app/utlgo
+COPY --from=builder /app/utlgo /usr/local/bin/utlgo
 
 # Run the web service on container startup.
-ENTRYPOINT ["/app/utlgo"]
+ENTRYPOINT ["utlgo"]
 
 # [END run_helloworld_dockerfile]
 # [END cloudrun_helloworld_dockerfile]
